@@ -3,35 +3,35 @@ import dlib
 import numpy as np
 import time
 
-# טען את ספריית ה-C המשותפת
+# Load the shared C library
 lib = ctypes.CDLL('./yaw_calculations_avg.so')
 
-# הגדר את סוגי הקלט והפלט של הפונקציה
+# Define the input and output types of the function
 lib.calculate_yaw_and_Q.argtypes = [ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float)]
 lib.calculate_yaw_and_Q.restype = None
 
-# פונקציה לקבלת נקודות Landmark של עיניים ואף
+# Function to get eye and nose Landmark points
 def get_eye_nose_points(landmarks):
-    # עין ימין
+    # Right eye
     right_eye = [(landmarks.part(i).x, landmarks.part(i).y) for i in range(36, 42)]
-    # עין שמאל
+    # Left eye
     left_eye = [(landmarks.part(i).x, landmarks.part(i).y) for i in range(42, 48)]
-    # אף
+    # Nose
     nose = [(landmarks.part(i).x, landmarks.part(i).y) for i in range(27, 30)]
 
-    # המרת הנקודות למערך אחד ממדי של float32
+    # Convert the points to a one-dimensional float32 array
     eye_points = np.array(right_eye + left_eye, dtype=np.float32).flatten()
     nose_points = np.array(nose, dtype=np.float32).flatten()
 
     return eye_points, nose_points
 
-# פונקציה לקבלת Q ו-Yaw מה-C
+# Function to get Q and Yaw from the C code
 def get_yaw_from_c(eye_points, nose_points):
-    # משתנים לאחסון התוצאה
+    # Variables to store the result
     Q = ctypes.c_float()
     yaw = ctypes.c_float()
 
-    # קריאה לפונקציית ה-C
+    # Call the C function
     lib.calculate_yaw_and_Q(
         eye_points.ctypes.data_as(ctypes.POINTER(ctypes.c_float)),
         nose_points.ctypes.data_as(ctypes.POINTER(ctypes.c_float)),
@@ -41,36 +41,40 @@ def get_yaw_from_c(eye_points, nose_points):
 
     return Q.value, yaw.value
 
-# הפונקציה הראשית
+# The main function
 def main(image_path):
-    x0 =  time.time()
-    # טען את התמונה והסריקה של Landmark
+    x0 = time.time()
+    # Load the image and Landmark detector
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor('../shape_predictor_68_face_landmarks.dat')
     x1 = time.time()
     print("detector and predictor: ", x1 - x0)
-    # קריאה לתמונה ואיתור פנים
+    
+    # Load the image and detect faces
     img = dlib.load_rgb_image(image_path)
     faces = detector(img, 1)
     if len(faces) == 0:
         print("No face detected.")
         return
 
-    # איתור ה-Landmarks בפנים הראשונות שזוהו
+    # Detect the Landmarks on the first detected face
     landmarks = predictor(img, faces[0])
     x2 = time.time()
     print("Get landmarks: ", x2 - x1)
-    # קבלת הנקודות של העיניים והאף
+    
+    # Get the eye and nose points
     eye_points, nose_points = get_eye_nose_points(landmarks)
     x3 = time.time()
     print("Get eyes and nose points: ", x3 - x2)
-    # קבלת Q ו-Yaw מה-C
+    
+    # Get Q and Yaw from the C code
     Q, yaw = get_yaw_from_c(eye_points, nose_points)
     x4 = time.time()
     print("Get Q and yaw: ", x4 - x3)
-    # הדפסת התוצאה
+    
+    # Print the result
     print(f"Q: {Q}, Yaw: {yaw}")
 
 if __name__ == "__main__":
-    image_path = '../NEW/-51/1.png' # עדכן את הנתיב לתמונה שלך
+    image_path = './DATASET/-51/1.png'  # Update with your image path
     main(image_path)
