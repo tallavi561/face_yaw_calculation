@@ -71,7 +71,7 @@ Each folder corresponds to a yaw angle, and the images are stored in those folde
 
 ### 1. Update the Paths in the Script
 
-In the script `FINAL_GET_YAW_FROM_PATH2.py`, ensure the following paths are correct:
+In the script `get_yaw.py`, ensure the following paths are correct:
 
 - **Path to `shape_predictor_68_face_landmarks.dat`**:
   Update the path to this file in the script if necessary. By default, it's set to:
@@ -90,7 +90,7 @@ In the script `FINAL_GET_YAW_FROM_PATH2.py`, ensure the following paths are corr
 Once the paths are updated, you can run the script:
 
 ```bash
-python3 FINAL_GET_YAW_FROM_PATH2.py
+python3 get_yaw.py
 ```
 
 The script will detect the face in the image and print the calculated `Q` and yaw values.
