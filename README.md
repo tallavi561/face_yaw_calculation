@@ -1,6 +1,13 @@
 # Face Yaw Calculation
 
-This project calculates the yaw (rotation angle) of faces in images using facial landmarks. The images are organized into folders according to their yaw values. The project relies on a dataset and a facial landmarks model (`shape_predictor_68_face_landmarks.dat`).
+The goal of this project is to detect the yaw (rotation angle) of a face from a given image. For testing purposes, I created a dataset of images organized into folders based on their respective yaw values. The images were generated using Blender.
+
+You can download the dataset here:
+
+[Download Dataset](https://drive.google.com/file/d/1qrEP8gNNz1FJivloYYybPYRdRCElaxuo/view?usp=sharing)
+
+
+This project calculates the yaw of faces in images using facial landmarks. The project relies on a facial landmarks model (`shape_predictor_68_face_landmarks.dat`).
 
 ## Prerequisites
 
