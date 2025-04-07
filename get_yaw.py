@@ -46,7 +46,7 @@ def main(image_path):
     x0 = time.time()
     # Load the image and Landmark detector
     detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor('../shape_predictor_68_face_landmarks.dat')
+    predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')
     x1 = time.time()
     print("detector and predictor: ", x1 - x0)
     
@@ -76,5 +76,5 @@ def main(image_path):
     print(f"Q: {Q}, Yaw: {yaw}")
 
 if __name__ == "__main__":
-    image_path = './DATASET/-51/1.png'  # Update with your image path
+    image_path = './36.png'  # Update with your image path
     main(image_path)
