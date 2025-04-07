@@ -29,21 +29,12 @@ To install the necessary Python dependencies:
 pip install dlib numpy
 ```
 
-### 2. Download and Extract the Landmark Predictor Model
+### 2. Makefile
 
-Download the `shape_predictor_68_face_landmarks.dat` model:
+run the "make" command to get the .so file.
 
-```bash
-# Download the file
-wget http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
 
-# Extract the file
-bzip2 -d shape_predictor_68_face_landmarks.dat.bz2
-```
-
-Ensure the `shape_predictor_68_face_landmarks.dat` file is accessible in your working directory, and update the path in the Python script if needed.
-
-### 3. Download the Dataset
+### 3. Download the Dataset - optional
 
 Download the dataset containing images organized by yaw angles from this link:
 
